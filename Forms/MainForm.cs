@@ -16,6 +16,8 @@ namespace SmartLibrary.Forms
         private Label lblPageTitle;
         private List<Button> navButtons = new List<Button>();
         private Button activeButton;
+        private DataGridView dgvBooks;
+        private DataGridView dgvMembers;
 
         private static Color SidebarBg = Color.FromArgb(15, 23, 42);
         private static Color ContentBg = Color.FromArgb(241, 245, 249);
@@ -80,6 +82,45 @@ namespace SmartLibrary.Forms
                 navButtons.Add(btn);
                 y += 46;
             }
+            Label lblAdmin = new Label();
+            lblAdmin.Text = "  ADMIN ACTIONS";
+            lblAdmin.Font = new Font("Segoe UI", 8, FontStyle.Bold);
+            lblAdmin.ForeColor = Color.FromArgb(100, 116, 139);
+            lblAdmin.Size = new Size(220, 25);
+            lblAdmin.Location = new Point(0, y + 20);
+            panelSidebar.Controls.Add(lblAdmin);
+
+            Button btnAddBook = new Button();
+            btnAddBook.Text = "   + Add Book";
+            btnAddBook.Size = new Size(220, 38);
+            btnAddBook.Location = new Point(0, y + 45);
+            btnAddBook.FlatStyle = FlatStyle.Flat;
+            btnAddBook.FlatAppearance.BorderSize = 0;
+            btnAddBook.FlatAppearance.MouseOverBackColor = Color.FromArgb(30, 41, 59);
+            btnAddBook.BackColor = Color.FromArgb(37, 99, 235);
+            btnAddBook.ForeColor = Color.White;
+            btnAddBook.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btnAddBook.TextAlign = ContentAlignment.MiddleLeft;
+            btnAddBook.Padding = new Padding(10, 0, 0, 0);
+            btnAddBook.Cursor = Cursors.Hand;
+            btnAddBook.Click += delegate { ShowBookForm(null); };
+            panelSidebar.Controls.Add(btnAddBook);
+
+            Button btnAddMember = new Button();
+            btnAddMember.Text = "   + Add Member";
+            btnAddMember.Size = new Size(220, 38);
+            btnAddMember.Location = new Point(0, y + 87);
+            btnAddMember.FlatStyle = FlatStyle.Flat;
+            btnAddMember.FlatAppearance.BorderSize = 0;
+            btnAddMember.FlatAppearance.MouseOverBackColor = Color.FromArgb(30, 41, 59);
+            btnAddMember.BackColor = Color.FromArgb(16, 185, 129);
+            btnAddMember.ForeColor = Color.White;
+            btnAddMember.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btnAddMember.TextAlign = ContentAlignment.MiddleLeft;
+            btnAddMember.Padding = new Padding(10, 0, 0, 0);
+            btnAddMember.Cursor = Cursors.Hand;
+            btnAddMember.Click += delegate { ShowMemberForm(null); };
+            panelSidebar.Controls.Add(btnAddMember);
         }
 
         private void BuildTopBar()
@@ -137,7 +178,6 @@ namespace SmartLibrary.Forms
             panelContent = new Panel();
             panelContent.Dock = DockStyle.Fill;
             panelContent.BackColor = ContentBg;
-            panelContent.Padding = new Padding(20);
             panelContent.AutoScroll = true;
             Controls.Add(panelContent);
             panelContent.BringToFront();
@@ -145,6 +185,7 @@ namespace SmartLibrary.Forms
         }
 
         private void SetActiveNav(Button btn)
+
         {
             if (activeButton != null)
             {
@@ -197,7 +238,7 @@ namespace SmartLibrary.Forms
 
                 DataGridView dgv = CreateGrid();
                 dgv.Location = new Point(20, 165);
-                dgv.Size = new Size(panelContent.Width - 60, 280);
+                dgv.Size = new Size(panelContent.ClientSize.Width - 40, 280);
                 dgv.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
                 panelContent.Controls.Add(dgv);
 
@@ -243,54 +284,58 @@ namespace SmartLibrary.Forms
             card.Size = new Size(200, 105);
             card.Location = new Point(x, y);
             card.BackColor = CardBg;
-
             Panel bar = new Panel();
             bar.Size = new Size(4, 105);
             bar.BackColor = color;
             card.Controls.Add(bar);
-
             Label lblT = new Label();
-            lblT.Text = title;
-            lblT.Font = new Font("Segoe UI", 10);
-            lblT.ForeColor = TextMuted;
-            lblT.Location = new Point(18, 12);
-            lblT.AutoSize = true;
+            lblT.Text = title; lblT.Font = new Font("Segoe UI", 10);
+            lblT.ForeColor = TextMuted; lblT.Location = new Point(18, 12); lblT.AutoSize = true;
             card.Controls.Add(lblT);
-
             Label lblV = new Label();
-            lblV.Text = value;
-            lblV.Font = new Font("Segoe UI", 28, FontStyle.Bold);
-            lblV.ForeColor = color;
-            lblV.Location = new Point(18, 38);
-            lblV.AutoSize = true;
+            lblV.Text = value; lblV.Font = new Font("Segoe UI", 28, FontStyle.Bold);
+            lblV.ForeColor = color; lblV.Location = new Point(18, 38); lblV.AutoSize = true;
             card.Controls.Add(lblV);
-
             panelContent.Controls.Add(card);
         }
 
         // ==================== BOOKS ====================
-        private DataGridView dgvBooks;
-
         private void LoadBooksPage()
         {
             panelContent.Controls.Clear();
 
-            TextBox txtSearch = new TextBox();
-            txtSearch.Size = new Size(300, 28);
-            txtSearch.Location = new Point(20, 10);
+            ToolStrip ts = new ToolStrip();
+            ts.GripStyle = ToolStripGripStyle.Hidden;
+            ts.BackColor = Color.FromArgb(226, 232, 240);
+            ts.Padding = new Padding(10, 5, 10, 5);
+
+            ToolStripTextBox txtSearch = new ToolStripTextBox();
+            txtSearch.Size = new Size(250, 28);
             txtSearch.Font = new Font("Segoe UI", 11);
             txtSearch.TextChanged += delegate { RefreshBooks(txtSearch.Text.Trim()); };
-            panelContent.Controls.Add(txtSearch);
+            ts.Items.Add(txtSearch);
+            ts.Items.Add(new ToolStripSeparator());
 
-            Button btnAdd = MakeButton("+ New Book", AccentBlue, 340, 8);
+            ToolStripButton btnAdd = new ToolStripButton("+ New Book");
+            btnAdd.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btnAdd.ForeColor = Color.FromArgb(37, 99, 235);
             btnAdd.Click += delegate { ShowBookForm(null); };
-            panelContent.Controls.Add(btnAdd);
+            ts.Items.Add(btnAdd);
+            ts.Items.Add(new ToolStripSeparator());
+
+            ToolStripButton btnDel = new ToolStripButton("Delete");
+            btnDel.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btnDel.ForeColor = Color.FromArgb(239, 68, 68);
+            btnDel.Click += delegate { DeleteSelectedBook(); };
+            ts.Items.Add(btnDel);
+
+            panelContent.Controls.Add(ts);
 
             dgvBooks = CreateGrid();
-            dgvBooks.Location = new Point(20, 50);
-            dgvBooks.Size = new Size(panelContent.Width - 60, panelContent.Height - 110);
+            dgvBooks.Location = new Point(20, 45);
+            dgvBooks.Size = new Size(panelContent.ClientSize.Width - 40, panelContent.ClientSize.Height - 55);
             dgvBooks.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvBooks.CellDoubleClick += delegate(object s, DataGridViewCellEventArgs ev)
+            dgvBooks.CellDoubleClick += delegate (object s, DataGridViewCellEventArgs ev)
             {
                 if (ev.RowIndex < 0) return;
                 int id = Convert.ToInt32(dgvBooks.Rows[ev.RowIndex].Cells["ID"].Value);
@@ -298,7 +343,26 @@ namespace SmartLibrary.Forms
                 if (book != null) ShowBookForm(book);
             };
             panelContent.Controls.Add(dgvBooks);
+
             RefreshBooks("");
+        }
+
+        private void DeleteSelectedBook()
+        {
+            if (dgvBooks == null || dgvBooks.CurrentRow == null)
+            {
+                MessageBox.Show("Please select a book to delete.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            int id = Convert.ToInt32(dgvBooks.CurrentRow.Cells["ID"].Value);
+            string title = dgvBooks.CurrentRow.Cells["Title"].Value.ToString();
+            if (MessageBox.Show("Are you sure you want to delete \"" + title + "\"?", "Delete Book",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                new BookRepository().Delete(id);
+                MessageBox.Show("Book deleted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                RefreshBooks("");
+            }
         }
 
         private void RefreshBooks(string search)
@@ -306,22 +370,15 @@ namespace SmartLibrary.Forms
             List<Book> books = string.IsNullOrEmpty(search)
                 ? new BookRepository().GetAll()
                 : new BookRepository().Search(search);
-
             DataTable dt = new DataTable();
             dt.Columns.Add("ID", typeof(int));
-            dt.Columns.Add("Title");
-            dt.Columns.Add("Author");
-            dt.Columns.Add("ISBN");
-            dt.Columns.Add("Category");
-            dt.Columns.Add("Year", typeof(int));
-            dt.Columns.Add("Shelf");
-            dt.Columns.Add("Total", typeof(int));
+            dt.Columns.Add("Title"); dt.Columns.Add("Author"); dt.Columns.Add("ISBN");
+            dt.Columns.Add("Category"); dt.Columns.Add("Year", typeof(int));
+            dt.Columns.Add("Shelf"); dt.Columns.Add("Total", typeof(int));
             dt.Columns.Add("Available", typeof(int));
-
             foreach (Book b in books)
                 dt.Rows.Add(b.BookID, b.Title, b.Author, b.ISBN, b.CategoryName,
                     b.PublishYear, b.ShelfLocation, b.TotalCopies, b.AvailableCopies);
-
             dgvBooks.DataSource = dt;
             if (dgvBooks.Columns.Contains("ID")) dgvBooks.Columns["ID"].Visible = false;
         }
@@ -342,12 +399,9 @@ namespace SmartLibrary.Forms
             for (int i = 0; i < labels.Length; i++)
             {
                 Label lbl = new Label();
-                lbl.Text = labels[i];
-                lbl.Location = new Point(25, yy);
-                lbl.Font = new Font("Segoe UI", 9);
-                lbl.AutoSize = true;
+                lbl.Text = labels[i]; lbl.Location = new Point(25, yy);
+                lbl.Font = new Font("Segoe UI", 9); lbl.AutoSize = true;
                 frm.Controls.Add(lbl);
-
                 txts[i] = new TextBox();
                 txts[i].Location = new Point(25, yy + 18);
                 txts[i].Size = new Size(430, 26);
@@ -357,28 +411,21 @@ namespace SmartLibrary.Forms
             }
 
             Label lblCat = new Label();
-            lblCat.Text = "Category";
-            lblCat.Location = new Point(25, yy);
-            lblCat.Font = new Font("Segoe UI", 9);
-            lblCat.AutoSize = true;
+            lblCat.Text = "Category"; lblCat.Location = new Point(25, yy);
+            lblCat.Font = new Font("Segoe UI", 9); lblCat.AutoSize = true;
             frm.Controls.Add(lblCat);
-
             ComboBox cmbCat = new ComboBox();
-            cmbCat.Location = new Point(25, yy + 18);
-            cmbCat.Size = new Size(430, 26);
+            cmbCat.Location = new Point(25, yy + 18); cmbCat.Size = new Size(430, 26);
             cmbCat.Font = new Font("Segoe UI", 10);
             cmbCat.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbCat.DataSource = new CategoryRepository().GetAll();
-            cmbCat.DisplayMember = "CategoryName";
-            cmbCat.ValueMember = "CategoryID";
+            cmbCat.DisplayMember = "CategoryName"; cmbCat.ValueMember = "CategoryID";
             frm.Controls.Add(cmbCat);
 
             if (existing != null)
             {
-                txts[0].Text = existing.ISBN;
-                txts[1].Text = existing.Title;
-                txts[2].Text = existing.Author;
-                txts[3].Text = existing.Publisher;
+                txts[0].Text = existing.ISBN; txts[1].Text = existing.Title;
+                txts[2].Text = existing.Author; txts[3].Text = existing.Publisher;
                 txts[4].Text = existing.PublishYear.ToString();
                 txts[5].Text = existing.PageCount.ToString();
                 txts[6].Text = existing.ShelfLocation;
@@ -389,28 +436,23 @@ namespace SmartLibrary.Forms
             yy += 55;
             Button btnSave = new Button();
             btnSave.Text = existing == null ? "Save" : "Update";
-            btnSave.Size = new Size(200, 36);
-            btnSave.Location = new Point(25, yy);
+            btnSave.Size = new Size(200, 36); btnSave.Location = new Point(25, yy);
             btnSave.Font = new Font("Segoe UI", 11, FontStyle.Bold);
-            btnSave.BackColor = AccentBlue;
-            btnSave.ForeColor = Color.White;
-            btnSave.FlatStyle = FlatStyle.Flat;
-            btnSave.FlatAppearance.BorderSize = 0;
+            btnSave.BackColor = AccentBlue; btnSave.ForeColor = Color.White;
+            btnSave.FlatStyle = FlatStyle.Flat; btnSave.FlatAppearance.BorderSize = 0;
             btnSave.Cursor = Cursors.Hand;
             frm.Controls.Add(btnSave);
 
             if (existing != null)
             {
-                Button btnDel = new Button();
-                btnDel.Text = "Delete";
-                btnDel.Size = new Size(100, 36);
-                btnDel.Location = new Point(240, yy);
-                btnDel.Font = new Font("Segoe UI", 11, FontStyle.Bold);
-                btnDel.BackColor = Color.FromArgb(239, 68, 68);
-                btnDel.ForeColor = Color.White;
-                btnDel.FlatStyle = FlatStyle.Flat;
-                btnDel.FlatAppearance.BorderSize = 0;
-                btnDel.Click += delegate
+                Button btnFormDel = new Button();
+                btnFormDel.Text = "Delete"; btnFormDel.Size = new Size(100, 36);
+                btnFormDel.Location = new Point(240, yy);
+                btnFormDel.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+                btnFormDel.BackColor = Color.FromArgb(239, 68, 68);
+                btnFormDel.ForeColor = Color.White;
+                btnFormDel.FlatStyle = FlatStyle.Flat; btnFormDel.FlatAppearance.BorderSize = 0;
+                btnFormDel.Click += delegate
                 {
                     if (MessageBox.Show("Are you sure you want to delete this book?", "Delete",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
@@ -420,7 +462,7 @@ namespace SmartLibrary.Forms
                         RefreshBooks("");
                     }
                 };
-                frm.Controls.Add(btnDel);
+                frm.Controls.Add(btnFormDel);
             }
 
             btnSave.Click += delegate
@@ -431,10 +473,8 @@ namespace SmartLibrary.Forms
                     return;
                 }
                 Book book = existing != null ? existing : new Book();
-                book.ISBN = txts[0].Text.Trim();
-                book.Title = txts[1].Text.Trim();
-                book.Author = txts[2].Text.Trim();
-                book.Publisher = txts[3].Text.Trim();
+                book.ISBN = txts[0].Text.Trim(); book.Title = txts[1].Text.Trim();
+                book.Author = txts[2].Text.Trim(); book.Publisher = txts[3].Text.Trim();
                 int py; int.TryParse(txts[4].Text, out py); book.PublishYear = py;
                 int pc; int.TryParse(txts[5].Text, out pc); book.PageCount = pc;
                 book.ShelfLocation = txts[6].Text.Trim();
@@ -460,28 +500,60 @@ namespace SmartLibrary.Forms
         }
 
         // ==================== MEMBERS ====================
-        private DataGridView dgvMembers;
-
         private void LoadMembersPage()
         {
             panelContent.Controls.Clear();
 
+            // -- Toolbar panel at top --
+            Panel toolbar = new Panel();
+            toolbar.Size = new Size(panelContent.ClientSize.Width, 50);
+            toolbar.Location = new Point(0, 0);
+            toolbar.BackColor = ContentBg;
+            toolbar.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+
             TextBox txtSearch = new TextBox();
-            txtSearch.Size = new Size(300, 28);
+            txtSearch.Size = new Size(280, 30);
             txtSearch.Location = new Point(20, 10);
             txtSearch.Font = new Font("Segoe UI", 11);
+            txtSearch.BorderStyle = BorderStyle.FixedSingle;
+            txtSearch.BackColor = Color.White;
             txtSearch.TextChanged += delegate { RefreshMembers(txtSearch.Text.Trim()); };
-            panelContent.Controls.Add(txtSearch);
+            toolbar.Controls.Add(txtSearch);
 
-            Button btnAdd = MakeButton("+ New Member", Color.FromArgb(16, 185, 129), 340, 8);
+            Button btnAdd = new Button();
+            btnAdd.Text = "+ New Member";
+            btnAdd.Size = new Size(140, 32);
+            btnAdd.Location = new Point(320, 9);
+            btnAdd.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btnAdd.BackColor = Color.FromArgb(16, 185, 129);
+            btnAdd.ForeColor = Color.White;
+            btnAdd.FlatStyle = FlatStyle.Flat;
+            btnAdd.FlatAppearance.BorderSize = 0;
+            btnAdd.Cursor = Cursors.Hand;
             btnAdd.Click += delegate { ShowMemberForm(null); };
-            panelContent.Controls.Add(btnAdd);
+            toolbar.Controls.Add(btnAdd);
 
+            Button btnDel = new Button();
+            btnDel.Text = "Delete";
+            btnDel.Size = new Size(90, 32);
+            btnDel.Location = new Point(470, 9);
+            btnDel.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btnDel.BackColor = Color.FromArgb(239, 68, 68);
+            btnDel.ForeColor = Color.White;
+            btnDel.FlatStyle = FlatStyle.Flat;
+            btnDel.FlatAppearance.BorderSize = 0;
+            btnDel.Cursor = Cursors.Hand;
+            btnDel.Click += delegate { DeleteSelectedMember(); };
+            toolbar.Controls.Add(btnDel);
+
+            panelContent.Controls.Add(toolbar);
+
+            // -- Grid below toolbar --
             dgvMembers = CreateGrid();
-            dgvMembers.Location = new Point(20, 50);
-            dgvMembers.Size = new Size(panelContent.Width - 60, panelContent.Height - 110);
+            dgvMembers.Location = new Point(20, 55);
+            dgvMembers.Size = new Size(panelContent.ClientSize.Width - 40, panelContent.ClientSize.Height - 70);
             dgvMembers.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvMembers.CellDoubleClick += delegate(object s, DataGridViewCellEventArgs ev)
+            dgvMembers.CellDoubleClick += delegate (object s, DataGridViewCellEventArgs ev)
             {
                 if (ev.RowIndex < 0) return;
                 int id = Convert.ToInt32(dgvMembers.Rows[ev.RowIndex].Cells["ID"].Value);
@@ -489,7 +561,30 @@ namespace SmartLibrary.Forms
                 if (m != null) ShowMemberForm(m);
             };
             panelContent.Controls.Add(dgvMembers);
+
+            // Bring toolbar to front
+            toolbar.BringToFront();
+
             RefreshMembers("");
+        }
+
+        private void DeleteSelectedMember()
+        {
+            if (dgvMembers == null || dgvMembers.CurrentRow == null)
+            {
+                MessageBox.Show("Please select a member to delete.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            int id = Convert.ToInt32(dgvMembers.CurrentRow.Cells["ID"].Value);
+            string name = dgvMembers.CurrentRow.Cells["First Name"].Value.ToString() + " " +
+                          dgvMembers.CurrentRow.Cells["Last Name"].Value.ToString();
+            if (MessageBox.Show("Are you sure you want to delete \"" + name + "\"?", "Delete Member",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                new MemberRepository().Delete(id);
+                MessageBox.Show("Member deleted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                RefreshMembers("");
+            }
         }
 
         private void RefreshMembers(string search)
@@ -497,21 +592,15 @@ namespace SmartLibrary.Forms
             List<Member> members = string.IsNullOrEmpty(search)
                 ? new MemberRepository().GetAll()
                 : new MemberRepository().Search(search);
-
             DataTable dt = new DataTable();
             dt.Columns.Add("ID", typeof(int));
-            dt.Columns.Add("Student No");
-            dt.Columns.Add("First Name");
-            dt.Columns.Add("Last Name");
-            dt.Columns.Add("Email");
-            dt.Columns.Add("Phone");
-            dt.Columns.Add("Department");
+            dt.Columns.Add("Student No"); dt.Columns.Add("First Name");
+            dt.Columns.Add("Last Name"); dt.Columns.Add("Email");
+            dt.Columns.Add("Phone"); dt.Columns.Add("Department");
             dt.Columns.Add("Max Books", typeof(int));
-
             foreach (Member m in members)
                 dt.Rows.Add(m.MemberID, m.StudentNumber, m.FirstName, m.LastName,
                     m.Email, m.Phone, m.Department, m.MaxBooks);
-
             dgvMembers.DataSource = dt;
             if (dgvMembers.Columns.Contains("ID")) dgvMembers.Columns["ID"].Visible = false;
         }
@@ -532,12 +621,9 @@ namespace SmartLibrary.Forms
             for (int i = 0; i < labels.Length; i++)
             {
                 Label lbl = new Label();
-                lbl.Text = labels[i];
-                lbl.Location = new Point(25, yy);
-                lbl.Font = new Font("Segoe UI", 9);
-                lbl.AutoSize = true;
+                lbl.Text = labels[i]; lbl.Location = new Point(25, yy);
+                lbl.Font = new Font("Segoe UI", 9); lbl.AutoSize = true;
                 frm.Controls.Add(lbl);
-
                 txts[i] = new TextBox();
                 txts[i].Location = new Point(25, yy + 18);
                 txts[i].Size = new Size(410, 26);
@@ -548,12 +634,9 @@ namespace SmartLibrary.Forms
 
             if (existing != null)
             {
-                txts[0].Text = existing.StudentNumber;
-                txts[1].Text = existing.FirstName;
-                txts[2].Text = existing.LastName;
-                txts[3].Text = existing.Email;
-                txts[4].Text = existing.Phone;
-                txts[5].Text = existing.Department;
+                txts[0].Text = existing.StudentNumber; txts[1].Text = existing.FirstName;
+                txts[2].Text = existing.LastName; txts[3].Text = existing.Email;
+                txts[4].Text = existing.Phone; txts[5].Text = existing.Department;
                 txts[6].Text = existing.MaxBooks.ToString();
             }
             else { txts[6].Text = "3"; }
@@ -561,28 +644,24 @@ namespace SmartLibrary.Forms
             yy += 10;
             Button btnSave = new Button();
             btnSave.Text = existing == null ? "Save" : "Update";
-            btnSave.Size = new Size(200, 36);
-            btnSave.Location = new Point(25, yy);
+            btnSave.Size = new Size(200, 36); btnSave.Location = new Point(25, yy);
             btnSave.Font = new Font("Segoe UI", 11, FontStyle.Bold);
             btnSave.BackColor = Color.FromArgb(16, 185, 129);
             btnSave.ForeColor = Color.White;
-            btnSave.FlatStyle = FlatStyle.Flat;
-            btnSave.FlatAppearance.BorderSize = 0;
+            btnSave.FlatStyle = FlatStyle.Flat; btnSave.FlatAppearance.BorderSize = 0;
             btnSave.Cursor = Cursors.Hand;
             frm.Controls.Add(btnSave);
 
             if (existing != null)
             {
-                Button btnDel = new Button();
-                btnDel.Text = "Delete";
-                btnDel.Size = new Size(100, 36);
-                btnDel.Location = new Point(240, yy);
-                btnDel.Font = new Font("Segoe UI", 11, FontStyle.Bold);
-                btnDel.BackColor = Color.FromArgb(239, 68, 68);
-                btnDel.ForeColor = Color.White;
-                btnDel.FlatStyle = FlatStyle.Flat;
-                btnDel.FlatAppearance.BorderSize = 0;
-                btnDel.Click += delegate
+                Button btnFormDel = new Button();
+                btnFormDel.Text = "Delete"; btnFormDel.Size = new Size(100, 36);
+                btnFormDel.Location = new Point(240, yy);
+                btnFormDel.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+                btnFormDel.BackColor = Color.FromArgb(239, 68, 68);
+                btnFormDel.ForeColor = Color.White;
+                btnFormDel.FlatStyle = FlatStyle.Flat; btnFormDel.FlatAppearance.BorderSize = 0;
+                btnFormDel.Click += delegate
                 {
                     if (MessageBox.Show("Are you sure you want to delete this member?", "Delete",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
@@ -592,7 +671,7 @@ namespace SmartLibrary.Forms
                         RefreshMembers("");
                     }
                 };
-                frm.Controls.Add(btnDel);
+                frm.Controls.Add(btnFormDel);
             }
 
             btnSave.Click += delegate
@@ -603,12 +682,9 @@ namespace SmartLibrary.Forms
                     return;
                 }
                 Member m = existing != null ? existing : new Member();
-                m.StudentNumber = txts[0].Text.Trim();
-                m.FirstName = txts[1].Text.Trim();
-                m.LastName = txts[2].Text.Trim();
-                m.Email = txts[3].Text.Trim();
-                m.Phone = txts[4].Text.Trim();
-                m.Department = txts[5].Text.Trim();
+                m.StudentNumber = txts[0].Text.Trim(); m.FirstName = txts[1].Text.Trim();
+                m.LastName = txts[2].Text.Trim(); m.Email = txts[3].Text.Trim();
+                m.Phone = txts[4].Text.Trim(); m.Department = txts[5].Text.Trim();
                 int mx; int.TryParse(txts[6].Text, out mx); m.MaxBooks = mx > 0 ? mx : 3;
                 m.ExpiryDate = DateTime.Now.AddYears(1);
 
@@ -625,73 +701,51 @@ namespace SmartLibrary.Forms
         private void LoadBorrowPage()
         {
             panelContent.Controls.Clear();
-
             Label lblTitle = new Label();
             lblTitle.Text = "Borrow a Book";
             lblTitle.Font = new Font("Segoe UI", 14, FontStyle.Bold);
-            lblTitle.ForeColor = TextDark;
-            lblTitle.Location = new Point(20, 10);
-            lblTitle.AutoSize = true;
+            lblTitle.ForeColor = TextDark; lblTitle.Location = new Point(20, 10); lblTitle.AutoSize = true;
             panelContent.Controls.Add(lblTitle);
 
             int yy = 55;
-
-            AddLabel("Select Member:", 20, yy);
-            yy += 22;
+            AddLabel("Select Member:", 20, yy); yy += 22;
             ComboBox cmbMember = new ComboBox();
-            cmbMember.Location = new Point(20, yy);
-            cmbMember.Size = new Size(400, 28);
+            cmbMember.Location = new Point(20, yy); cmbMember.Size = new Size(400, 28);
             cmbMember.Font = new Font("Segoe UI", 10);
             cmbMember.DropDownStyle = ComboBoxStyle.DropDownList;
-            List<Member> members = new MemberRepository().GetAll();
-            cmbMember.DataSource = members;
+            cmbMember.DataSource = new MemberRepository().GetAll();
             cmbMember.DisplayMember = "FullName";
-            panelContent.Controls.Add(cmbMember);
-            yy += 42;
+            panelContent.Controls.Add(cmbMember); yy += 42;
 
-            AddLabel("Select Book (available):", 20, yy);
-            yy += 22;
+            AddLabel("Select Book (available):", 20, yy); yy += 22;
             ComboBox cmbBook = new ComboBox();
-            cmbBook.Location = new Point(20, yy);
-            cmbBook.Size = new Size(400, 28);
+            cmbBook.Location = new Point(20, yy); cmbBook.Size = new Size(400, 28);
             cmbBook.Font = new Font("Segoe UI", 10);
             cmbBook.DropDownStyle = ComboBoxStyle.DropDownList;
-            List<Book> books = new BookRepository().GetAvailableBooks();
-            cmbBook.DataSource = books;
+            cmbBook.DataSource = new BookRepository().GetAvailableBooks();
             cmbBook.DisplayMember = "Title";
-            panelContent.Controls.Add(cmbBook);
-            yy += 42;
+            panelContent.Controls.Add(cmbBook); yy += 42;
 
-            AddLabel("Due Date:", 20, yy);
-            yy += 22;
+            AddLabel("Due Date:", 20, yy); yy += 22;
             DateTimePicker dtpDue = new DateTimePicker();
-            dtpDue.Location = new Point(20, yy);
-            dtpDue.Size = new Size(250, 28);
+            dtpDue.Location = new Point(20, yy); dtpDue.Size = new Size(250, 28);
             dtpDue.Font = new Font("Segoe UI", 10);
-            dtpDue.Value = DateTime.Now.AddDays(14);
-            dtpDue.MinDate = DateTime.Now.AddDays(1);
-            panelContent.Controls.Add(dtpDue);
-            yy += 48;
+            dtpDue.Value = DateTime.Now.AddDays(14); dtpDue.MinDate = DateTime.Now.AddDays(1);
+            panelContent.Controls.Add(dtpDue); yy += 48;
 
             Button btnBorrow = new Button();
-            btnBorrow.Text = "Borrow Book";
-            btnBorrow.Size = new Size(200, 42);
+            btnBorrow.Text = "Borrow Book"; btnBorrow.Size = new Size(200, 42);
             btnBorrow.Location = new Point(20, yy);
             btnBorrow.Font = new Font("Segoe UI", 12, FontStyle.Bold);
-            btnBorrow.BackColor = AccentBlue;
-            btnBorrow.ForeColor = Color.White;
-            btnBorrow.FlatStyle = FlatStyle.Flat;
-            btnBorrow.FlatAppearance.BorderSize = 0;
+            btnBorrow.BackColor = AccentBlue; btnBorrow.ForeColor = Color.White;
+            btnBorrow.FlatStyle = FlatStyle.Flat; btnBorrow.FlatAppearance.BorderSize = 0;
             btnBorrow.Cursor = Cursors.Hand;
             btnBorrow.Click += delegate
             {
                 Member selMember = cmbMember.SelectedItem as Member;
                 Book selBook = cmbBook.SelectedItem as Book;
                 if (selMember == null || selBook == null)
-                {
-                    MessageBox.Show("Please select a member and a book!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
+                { MessageBox.Show("Please select a member and a book!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
                 try
                 {
                     new BorrowRepository().BorrowBook(selBook.BookID, selMember.MemberID,
@@ -702,9 +756,7 @@ namespace SmartLibrary.Forms
                     LoadBorrowPage();
                 }
                 catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                { MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
             };
             panelContent.Controls.Add(btnBorrow);
         }
@@ -713,41 +765,32 @@ namespace SmartLibrary.Forms
         private void LoadReturnPage()
         {
             panelContent.Controls.Clear();
-
             Label lblTitle = new Label();
             lblTitle.Text = "Return Book - double click to return";
             lblTitle.Font = new Font("Segoe UI", 14, FontStyle.Bold);
-            lblTitle.ForeColor = TextDark;
-            lblTitle.Location = new Point(20, 10);
-            lblTitle.AutoSize = true;
+            lblTitle.ForeColor = TextDark; lblTitle.Location = new Point(20, 10); lblTitle.AutoSize = true;
             panelContent.Controls.Add(lblTitle);
 
             DataGridView dgv = CreateGrid();
             dgv.Location = new Point(20, 50);
-            dgv.Size = new Size(panelContent.Width - 60, panelContent.Height - 110);
+            dgv.Size = new Size(panelContent.ClientSize.Width - 40, panelContent.ClientSize.Height - 65);
             dgv.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panelContent.Controls.Add(dgv);
 
             List<BorrowRecord> active = new BorrowRepository().GetActive();
             DataTable dt = new DataTable();
-            dt.Columns.Add("ID", typeof(int));
-            dt.Columns.Add("Book");
-            dt.Columns.Add("Member");
-            dt.Columns.Add("Student No");
-            dt.Columns.Add("Borrow Date");
-            dt.Columns.Add("Due Date");
-            dt.Columns.Add("Days Left", typeof(int));
-            dt.Columns.Add("Status");
-
+            dt.Columns.Add("ID", typeof(int)); dt.Columns.Add("Book");
+            dt.Columns.Add("Member"); dt.Columns.Add("Student No");
+            dt.Columns.Add("Borrow Date"); dt.Columns.Add("Due Date");
+            dt.Columns.Add("Days Left", typeof(int)); dt.Columns.Add("Status");
             foreach (BorrowRecord r in active)
                 dt.Rows.Add(r.RecordID, r.BookTitle, r.MemberName, r.StudentNumber,
                     r.BorrowDate.ToString("dd.MM.yyyy"), r.DueDate.ToString("dd.MM.yyyy"),
                     r.DaysRemaining, r.IsOverdue ? "OVERDUE" : "Borrowed");
-
             dgv.DataSource = dt;
             if (dgv.Columns.Contains("ID")) dgv.Columns["ID"].Visible = false;
 
-            dgv.CellDoubleClick += delegate(object s, DataGridViewCellEventArgs ev)
+            dgv.CellDoubleClick += delegate (object s, DataGridViewCellEventArgs ev)
             {
                 if (ev.RowIndex < 0) return;
                 int recordId = Convert.ToInt32(dgv.Rows[ev.RowIndex].Cells["ID"].Value);
@@ -762,9 +805,7 @@ namespace SmartLibrary.Forms
                         LoadReturnPage();
                     }
                     catch (Exception ex)
-                    {
-                        MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    { MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
                 }
             };
         }
@@ -773,16 +814,12 @@ namespace SmartLibrary.Forms
         private void LoadReportsPage()
         {
             panelContent.Controls.Clear();
-
             AddLabel("Reports", 20, 10).Font = new Font("Segoe UI", 14, FontStyle.Bold);
-
             int yy = 50;
             AddReportCard("Active Borrows", "All currently borrowed books", AccentBlue, yy,
-                delegate { ShowReport("Active Borrows", new BorrowRepository().GetActive()); });
-            yy += 80;
+                delegate { ShowReport("Active Borrows", new BorrowRepository().GetActive()); }); yy += 80;
             AddReportCard("Overdue Books", "Books past their due date", Color.FromArgb(239, 68, 68), yy,
-                delegate { ShowReport("Overdue Books", new BorrowRepository().GetOverdue()); });
-            yy += 80;
+                delegate { ShowReport("Overdue Books", new BorrowRepository().GetOverdue()); }); yy += 80;
             AddReportCard("Unpaid Fines", "Members with outstanding fines", Color.FromArgb(245, 158, 11), yy,
                 delegate { ShowFinesReport(); });
         }
@@ -790,94 +827,52 @@ namespace SmartLibrary.Forms
         private void AddReportCard(string title, string desc, Color color, int y, EventHandler onClick)
         {
             Panel card = new Panel();
-            card.Size = new Size(panelContent.Width - 60, 65);
-            card.Location = new Point(20, y);
-            card.BackColor = CardBg;
+            card.Size = new Size(panelContent.ClientSize.Width - 40, 65);
+            card.Location = new Point(20, y); card.BackColor = CardBg;
             card.Cursor = Cursors.Hand;
             card.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-
-            Panel bar = new Panel();
-            bar.Size = new Size(4, 65);
-            bar.BackColor = color;
+            Panel bar = new Panel(); bar.Size = new Size(4, 65); bar.BackColor = color;
             card.Controls.Add(bar);
-
-            Label lblT = new Label();
-            lblT.Text = title;
+            Label lblT = new Label(); lblT.Text = title;
             lblT.Font = new Font("Segoe UI", 12, FontStyle.Bold);
-            lblT.ForeColor = TextDark;
-            lblT.Location = new Point(18, 8);
-            lblT.AutoSize = true;
+            lblT.ForeColor = TextDark; lblT.Location = new Point(18, 8); lblT.AutoSize = true;
             card.Controls.Add(lblT);
-
-            Label lblD = new Label();
-            lblD.Text = desc;
+            Label lblD = new Label(); lblD.Text = desc;
             lblD.Font = new Font("Segoe UI", 9);
-            lblD.ForeColor = TextMuted;
-            lblD.Location = new Point(18, 34);
-            lblD.AutoSize = true;
+            lblD.ForeColor = TextMuted; lblD.Location = new Point(18, 34); lblD.AutoSize = true;
             card.Controls.Add(lblD);
-
-            card.Click += onClick;
-            lblT.Click += onClick;
-            lblD.Click += onClick;
-
+            card.Click += onClick; lblT.Click += onClick; lblD.Click += onClick;
             panelContent.Controls.Add(card);
         }
 
         private void ShowReport(string title, List<BorrowRecord> records)
         {
-            Form frm = new Form();
-            frm.Text = title;
-            frm.Size = new Size(900, 500);
+            Form frm = new Form(); frm.Text = title; frm.Size = new Size(900, 500);
             frm.StartPosition = FormStartPosition.CenterParent;
-
-            DataGridView dgv = CreateGrid();
-            dgv.Dock = DockStyle.Fill;
-            frm.Controls.Add(dgv);
-
+            DataGridView dgv = CreateGrid(); dgv.Dock = DockStyle.Fill; frm.Controls.Add(dgv);
             DataTable dt = new DataTable();
-            dt.Columns.Add("Book");
-            dt.Columns.Add("Author");
-            dt.Columns.Add("Member");
-            dt.Columns.Add("Student No");
-            dt.Columns.Add("Borrow Date");
-            dt.Columns.Add("Due Date");
-            dt.Columns.Add("Days Left", typeof(int));
-            dt.Columns.Add("Status");
-
+            dt.Columns.Add("Book"); dt.Columns.Add("Author"); dt.Columns.Add("Member");
+            dt.Columns.Add("Student No"); dt.Columns.Add("Borrow Date");
+            dt.Columns.Add("Due Date"); dt.Columns.Add("Days Left", typeof(int)); dt.Columns.Add("Status");
             foreach (BorrowRecord r in records)
                 dt.Rows.Add(r.BookTitle, r.BookAuthor, r.MemberName, r.StudentNumber,
                     r.BorrowDate.ToString("dd.MM.yyyy"), r.DueDate.ToString("dd.MM.yyyy"),
                     r.DaysRemaining, r.IsOverdue ? "OVERDUE" : "Borrowed");
-
-            dgv.DataSource = dt;
-            frm.ShowDialog();
+            dgv.DataSource = dt; frm.ShowDialog();
         }
 
         private void ShowFinesReport()
         {
-            Form frm = new Form();
-            frm.Text = "Unpaid Fines";
-            frm.Size = new Size(800, 450);
+            Form frm = new Form(); frm.Text = "Unpaid Fines"; frm.Size = new Size(800, 450);
             frm.StartPosition = FormStartPosition.CenterParent;
-
-            DataGridView dgv = CreateGrid();
-            dgv.Dock = DockStyle.Fill;
-            frm.Controls.Add(dgv);
-
+            DataGridView dgv = CreateGrid(); dgv.Dock = DockStyle.Fill; frm.Controls.Add(dgv);
             List<FineRecord> fines = new FineRepository().GetUnpaid();
             DataTable dt = new DataTable();
-            dt.Columns.Add("Member");
-            dt.Columns.Add("Book");
-            dt.Columns.Add("Amount");
-            dt.Columns.Add("Reason");
-            dt.Columns.Add("Date");
-
+            dt.Columns.Add("Member"); dt.Columns.Add("Book"); dt.Columns.Add("Amount");
+            dt.Columns.Add("Reason"); dt.Columns.Add("Date");
             foreach (FineRecord f in fines)
                 dt.Rows.Add(f.MemberName, f.BookTitle, f.Amount.ToString("C"), f.Reason, f.FineDate.ToString("dd.MM.yyyy"));
-
-            dgv.DataSource = dt;
-            frm.ShowDialog();
+            dgv.DataSource = dt; frm.ShowDialog();
         }
 
         // ==================== SETTINGS ====================
@@ -886,21 +881,23 @@ namespace SmartLibrary.Forms
             panelContent.Controls.Clear();
             AddLabel("System Settings", 20, 10).Font = new Font("Segoe UI", 14, FontStyle.Bold);
             AddLabel("Database Connection String:", 20, 55);
-
             TextBox txtConn = new TextBox();
             txtConn.Text = DatabaseHelper.ConnectionString;
-            txtConn.Location = new Point(20, 78);
-            txtConn.Size = new Size(580, 26);
+            txtConn.Location = new Point(20, 78); txtConn.Size = new Size(580, 26);
             txtConn.Font = new Font("Consolas", 9);
             panelContent.Controls.Add(txtConn);
 
-            Button btnTest = MakeButton("Test Connection", Color.FromArgb(16, 185, 129), 615, 76);
-            btnTest.Size = new Size(150, 33);
+            Button btnTest = new Button();
+            btnTest.Text = "Test Connection"; btnTest.Size = new Size(150, 33);
+            btnTest.Location = new Point(615, 76);
+            btnTest.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btnTest.BackColor = Color.FromArgb(16, 185, 129);
+            btnTest.ForeColor = Color.White; btnTest.FlatStyle = FlatStyle.Flat;
+            btnTest.FlatAppearance.BorderSize = 0; btnTest.Cursor = Cursors.Hand;
             btnTest.Click += delegate
             {
                 DatabaseHelper.ConnectionString = txtConn.Text;
-                string err;
-                bool ok = DatabaseHelper.TestConnection(out err);
+                string err; bool ok = DatabaseHelper.TestConnection(out err);
                 MessageBox.Show(ok ? "Connection successful!" : "Connection error:\n" + err,
                     "Test", MessageBoxButtons.OK, ok ? MessageBoxIcon.Information : MessageBoxIcon.Error);
             };
@@ -908,10 +905,8 @@ namespace SmartLibrary.Forms
 
             Label lblAbout = new Label();
             lblAbout.Text = "Smart Library v1.0\nLibrary Management System\nC# Windows Forms + SQL Server\nCourse Project";
-            lblAbout.Font = new Font("Segoe UI", 10);
-            lblAbout.ForeColor = TextMuted;
-            lblAbout.Location = new Point(20, 130);
-            lblAbout.AutoSize = true;
+            lblAbout.Font = new Font("Segoe UI", 10); lblAbout.ForeColor = TextMuted;
+            lblAbout.Location = new Point(20, 130); lblAbout.AutoSize = true;
             panelContent.Controls.Add(lblAbout);
         }
 
@@ -919,15 +914,12 @@ namespace SmartLibrary.Forms
         private DataGridView CreateGrid()
         {
             DataGridView dgv = new DataGridView();
-            dgv.ReadOnly = true;
-            dgv.AllowUserToAddRows = false;
+            dgv.ReadOnly = true; dgv.AllowUserToAddRows = false;
             dgv.AllowUserToDeleteRows = false;
             dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv.MultiSelect = false;
-            dgv.BackgroundColor = Color.White;
-            dgv.BorderStyle = BorderStyle.None;
-            dgv.RowHeadersVisible = false;
+            dgv.MultiSelect = false; dgv.BackgroundColor = Color.White;
+            dgv.BorderStyle = BorderStyle.None; dgv.RowHeadersVisible = false;
             dgv.EnableHeadersVisualStyles = false;
             dgv.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dgv.GridColor = Color.FromArgb(226, 232, 240);
@@ -944,29 +936,11 @@ namespace SmartLibrary.Forms
             return dgv;
         }
 
-        private Button MakeButton(string text, Color bg, int x, int y)
-        {
-            Button btn = new Button();
-            btn.Text = text;
-            btn.Size = new Size(140, 33);
-            btn.Location = new Point(x, y);
-            btn.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            btn.BackColor = bg;
-            btn.ForeColor = Color.White;
-            btn.FlatStyle = FlatStyle.Flat;
-            btn.FlatAppearance.BorderSize = 0;
-            btn.Cursor = Cursors.Hand;
-            return btn;
-        }
-
         private Label AddLabel(string text, int x, int y)
         {
-            Label lbl = new Label();
-            lbl.Text = text;
-            lbl.Font = new Font("Segoe UI", 10);
-            lbl.ForeColor = TextDark;
-            lbl.Location = new Point(x, y);
-            lbl.AutoSize = true;
+            Label lbl = new Label(); lbl.Text = text;
+            lbl.Font = new Font("Segoe UI", 10); lbl.ForeColor = TextDark;
+            lbl.Location = new Point(x, y); lbl.AutoSize = true;
             panelContent.Controls.Add(lbl);
             return lbl;
         }
