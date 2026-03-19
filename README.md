@@ -1,6 +1,6 @@
 
 =======
-# 📚 Smart Library — Library Management System ===       v 1.0
+# 📚 Smart Library — Library Management System ===              v 1.0
 
 A desktop application for university library operations built with **C# Windows Forms** and **SQL Server**.
 
