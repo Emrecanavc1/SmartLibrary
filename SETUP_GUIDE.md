@@ -1,13 +1,5 @@
 # Smart Library - Setup Guide
 
-## Prerequisites
-
-**Only Visual Studio 2022 is needed!** (Community Edition is free)
-- Download: https://visualstudio.microsoft.com/downloads/
-- During installation, select: **.NET desktop development** workload
-
-That's it! The database is created automatically using LocalDB (included with Visual Studio).
-
 ## How to Run
 
 1. Open `SmartLibrary.sln` in Visual Studio
