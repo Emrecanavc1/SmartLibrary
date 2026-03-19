@@ -86,6 +86,8 @@ SmartLibrary/
 
 ## 🗄️ Database Schema
 
+![Database ERD](docs/SmartLibrary_DatabaseDiagram.png)
+
 | Table | Purpose | Key Columns |
 |-------|---------|-------------|
 | **Users** | System authentication | Username, PasswordHash, Role |
