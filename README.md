@@ -1,8 +1,10 @@
-# 📚 Smart Library — Library Management System
+
+=======
+# 📚 Smart Library — Library Management System ===       v 1.0
 
 A desktop application for university library operations built with **C# Windows Forms** and **SQL Server**.
 
-![Version](https://img.shields.io/badge/Version-1.01-blue?style=flat)
+>>>>>>>
 ![.NET Framework](https://img.shields.io/badge/.NET_Framework-4.8-512BD4?style=flat&logo=dotnet)
 ![C#](https://img.shields.io/badge/C%23-239120?style=flat&logo=csharp&logoColor=white)
 ![SQL Server](https://img.shields.io/badge/SQL_Server-CC2927?style=flat&logo=microsoftsqlserver&logoColor=white)
@@ -11,6 +13,7 @@ A desktop application for university library operations built with **C# Windows 
 
 ---
 
+<<<<<<< HEAD
 ## 📋 Version History
 
 ### v1.01 (Current)
@@ -24,6 +27,19 @@ A desktop application for university library operations built with **C# Windows 
 - Initial release
 - Core library management features
 - SQL Server database with stored procedures
+=======
+## 🖥️ Screenshots
+
+| Login Screen | Dashboard |
+|:---:|:---:|
+| Dark themed login with role-based auth | Real-time stats + recent transactions |
+
+| Books Management | Borrow & Return |
+|:---:|:---:|
+| CRUD + live search + category filter | Stock control + auto fine calculation |
+
+> *Replace these descriptions with actual screenshots after running the app.*
+>>>>>>> 2bda7a38ca3ccc8c8a05ad1aa9fe0cebe9c364de
 
 ---
 
@@ -36,7 +52,10 @@ A desktop application for university library operations built with **C# Windows 
 - **Borrow System** — Stock availability check, member limit validation, configurable due dates
 - **Return System** — Double-click to return, automatic late fine calculation ($2/day)
 - **Reports** — Active borrows, overdue books, unpaid fines
+<<<<<<< HEAD
 - **Sidebar Admin Actions** — Quick access Add Book and Add Member buttons in sidebar
+=======
+>>>>>>> 2bda7a38ca3ccc8c8a05ad1aa9fe0cebe9c364de
 - **Settings** — Connection string configuration with live test
 - **Auto Database** — Database creates itself on first run (zero manual SQL setup)
 
@@ -49,6 +68,7 @@ SmartLibrary/
 ├── Program.cs                    # Entry point + auto DB creation
 ├── SessionManager.cs             # Global user session state
 │
+<<<<<<< HEAD
 ├── Models/                       # Data classes
 │   ├── Book.cs                   # Book entity (32 lines)
 │   ├── Member.cs                 # Member entity (29 lines)
@@ -68,6 +88,27 @@ SmartLibrary/
 │
 ├── Database/
 │   └── SmartLibraryDB.sql        # Full database script
+=======
+├── Models/                       # Data classes (142 lines)
+│   ├── Book.cs                   # Book entity
+│   ├── Member.cs                 # Member entity
+│   ├── BorrowRecord.cs           # Borrow/return tracking
+│   └── OtherModels.cs            # User, Category, DashboardStats, FineRecord
+│
+├── DataAccess/                   # Database operations (933 lines)
+│   ├── DatabaseHelper.cs         # Connection manager + auto-create DB
+│   ├── BookRepository.cs         # Book CRUD operations
+│   ├── MemberRepository.cs       # Member CRUD operations
+│   ├── BorrowRepository.cs       # Borrow/return + stored procedure calls
+│   └── OtherRepositories.cs      # User, Category, Fine repositories
+│
+├── Forms/                        # UI layer (1,119 lines)
+│   ├── LoginForm.cs              # Authentication screen
+│   └── MainForm.cs               # Main app (Dashboard, Books, Members, etc.)
+│
+├── Database/
+│   └── SmartLibraryDB.sql        # Full database script (tables + SPs + seed data)
+>>>>>>> 2bda7a38ca3ccc8c8a05ad1aa9fe0cebe9c364de
 │
 ├── SmartLibrary.csproj           # Project file (.NET Framework 4.8)
 ├── SmartLibrary.sln              # Solution file
@@ -78,9 +119,15 @@ SmartLibrary/
 
 | Layer | Technology | Responsibility |
 |-------|-----------|----------------|
+<<<<<<< HEAD
 | Presentation | Windows Forms | UI components, event handling, sidebar navigation |
 | Data Access | ADO.NET | SQL queries, parameterized commands, stored procedure calls |
 | Database | SQL Server / LocalDB | 6 tables, 4 indexes, 3 stored procedures |
+=======
+| Presentation | Windows Forms | UI components, event handling |
+| Data Access | ADO.NET | SQL queries, stored procedure calls |
+| Database | SQL Server / LocalDB | Tables, indexes, stored procedures |
+>>>>>>> 2bda7a38ca3ccc8c8a05ad1aa9fe0cebe9c364de
 
 ---
 
@@ -137,7 +184,11 @@ The default connection string uses **LocalDB** (included with Visual Studio):
 Server=(localdb)\MSSQLLocalDB;Database=SmartLibraryDB;Trusted_Connection=True;
 ```
 
+<<<<<<< HEAD
 To use a different SQL Server instance, update via **Settings** page in the app:
+=======
+To use a different SQL Server instance, update via **Settings** page in the app or edit `DataAccess/DatabaseHelper.cs`:
+>>>>>>> 2bda7a38ca3ccc8c8a05ad1aa9fe0cebe9c364de
 
 | SQL Server Type | Connection String |
 |-----------------|-------------------|
@@ -164,7 +215,11 @@ To use a different SQL Server instance, update via **Settings** page in the app:
 
 | Metric | Value |
 |--------|-------|
+<<<<<<< HEAD
 | Total Lines of Code | 2,236+ |
+=======
+| Total Lines of Code | 2,236 |
+>>>>>>> 2bda7a38ca3ccc8c8a05ad1aa9fe0cebe9c364de
 | Source Files | 13 |
 | Database Tables | 6 |
 | Stored Procedures | 3 |
@@ -175,6 +230,7 @@ To use a different SQL Server instance, update via **Settings** page in the app:
 
 ## 🛣️ Roadmap
 
+<<<<<<< HEAD
 - [x] Book CRUD with search
 - [x] Member CRUD with search
 - [x] Sidebar admin quick actions
@@ -184,13 +240,20 @@ To use a different SQL Server instance, update via **Settings** page in the app:
 - [ ] Login attempt limiting
 - [ ] Book reservation / hold system
 - [ ] Email notifications (due date reminders)
+=======
+- [ ] Book reservation / hold system
+- [ ] Email notifications (due date reminders, overdue alerts)
+>>>>>>> 2bda7a38ca3ccc8c8a05ad1aa9fe0cebe9c364de
 - [ ] Dashboard charts (pie charts, bar graphs)
 - [ ] Export reports to Excel / PDF
 - [ ] ISBN barcode scanner
 - [ ] Member self-service portal
 - [ ] Multi-language support (EN/TR)
 - [ ] Dark mode / theme switcher
+<<<<<<< HEAD
 - [ ] Audit logging
+=======
+>>>>>>> 2bda7a38ca3ccc8c8a05ad1aa9fe0cebe9c364de
 
 ---
 
@@ -221,4 +284,8 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 ---
 
+<<<<<<< HEAD
 > **Smart Library v1.01** — University Course Project © 2025
+=======
+> **Smart Library** — University Course Project © 2026
+>>>>>>> 2bda7a38ca3ccc8c8a05ad1aa9fe0cebe9c364de
