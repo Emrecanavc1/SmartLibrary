@@ -221,5 +221,5 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 ---
 
-> **Created from Emre Can AVCI for the 2026 University Course Project**
+> **Created from Emre Can AVCI for the University Course Project**
 Smart Library v1.01** —  © 2026
